@@ -106,7 +106,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       for (i=0; i<file["today"].length; i++) {
         arr.push(
           (i+1).toString() + "등: " + file["today"][i].name
-          + "\n시간: " + file["today"][i].time
+          + "\n시간:" + file["today"][i].time.split("일")[1]
         );
       }
       
@@ -124,6 +124,20 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       }
       
       replier.reply(temp.join("\n\n"));
+    }
+    
+    if (msg == ".내순위") {
+      
+      arr = file["total"].sort((a,b) => b.score-a.score).map((i) => i.name);
+      replier.reply(
+        "이름: " + sender
+        + "\n오늘 순위: "
+          + (file["today"].indexOf(file["today"].find(e => e.name == sender)) +1) + "등 "
+          + "(" + file["today"].find(e => e.name == sender).time.split("일 ")[1] + ")"
+        + "\n전체 순위: "
+          + (arr.indexOf(sender) +1) + "등 "
+          +"(" + file["total"].find(e => e.name == sender).score + "점)"
+      );
     }
     
   } catch(e) {
