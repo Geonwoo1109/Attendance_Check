@@ -1,0 +1,48 @@
+https://stackoverflow.com/questions/69786918/javascript-sort-and-map-array-of-objects
+
+정렬하는법!
+
+const obj = {
+  "total": [{
+      "name": "asdf",
+      "score": 8
+    },
+    {
+      "name": "zxcv",
+      "score": 4
+    },
+    {
+      "name": "qwer",
+      "score": 17
+    },
+    {
+      "name": "poiu",
+      "score": 8
+    },
+    {
+      "name": "lkjh",
+      "score": 6
+    }
+  ]
+}
+// expected
+// ["qwer", "asdf", "poiu", "lkjh", "zxcv"]
+
+
+1. 
+arr.sort((a,b) => a.score-b.score).map(v => v.name)
+
+
+
+
+2. 
+const sortedNames = total
+  .sort(({ score: a }, { score: b }) => b - a)
+  .map(({ name }) => name);
+
+
+
+
+
+3. 
+onst res = obj["total"].sort((i, j) => j.score - i.score).map((i)=>i.name);
