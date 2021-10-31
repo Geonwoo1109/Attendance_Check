@@ -24,6 +24,8 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     
     if (!JSON.parse(Fs.read(Path + room))) file = {};
     if (!JSON.parse(Fs.read(Path + room))["today"]) file["today"] = [];
+    if (!JSON.parse(Fs.read(Path + room))["todayDate"])
+      file["todayDate"] = new Date().getDate();
     if (!JSON.parse(Fs.read(Path + room))["total"]) file["total"] = [];
     
     Fs.write(Path + room, JSON.stringify(file));
@@ -37,6 +39,15 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     
     
     if (msg == ".ㅊㅊ") {
+      //replier.reply(file["today"][file["today"].length - 1]["time"].split("일")[0] != new Date().getDate())
+     // if (file["today"][file["today"].length - 1]["time"].split("일")[0] != new Date().getDate()) file["today"] = [];
+      
+      //if (file["today"][file["today"].length - 1].time.split("일")[0] != new Date().getDate()) file["today"] = [];
+      if (file["todayDate"] != new Date().getDate()) {
+        file["today"] = [];
+        file["todayDate"] = new Date().getDate();
+      }
+      
       if (!file["today"].find(e => e.name == sender)) {
         //replier.reply(1)
         var score = Math.floor(Math.random()*10) + 1;
@@ -73,7 +84,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
         replier.reply(
           ">" + sender + "님이\n" + file["today"].length + "등으로 출석하셨어요."
           + "\n\n출석 확인: " + time()
-          + "얻은 점수: " + score);
+          + "\n얻은 점수: " + score);
           
           
           
@@ -104,11 +115,15 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     
     if (msg == ".전체순위") {
       
-      arr = [];
+      arr = file["total"].sort((a,b) => b.score-a.score).map((i) => i.name);
       
+      var temp = [];
+      for (i=0; i<arr.length; i++) {
+        temp.push((i+1) + "등: " + arr[i]
+        + "\n점수: " + file["total"].find(e => e.name == arr[i]).score);
+      }
       
-      
-      replier.reply(Object.keys(file["total"]))
+      replier.reply(temp.join("\n\n"));
     }
     
   } catch(e) {
@@ -119,8 +134,10 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 
 function time() {
   var day = new Date();
-  return (day.getHours() > 12 ? "오후 "
-      + (day.getHours() -12).toString() : day.getHours().toString()) + "시 "
+  return ( 
+   day.getDate() + "일 "+
+    (day.getHours() > 12 ?
+    "오후 " + (day.getHours() -12).toString() : day.getHours().toString()) )+ "시 "
     + day.getMinutes() + "분 "
     + day.getSeconds() + "초";
   
