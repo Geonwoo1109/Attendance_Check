@@ -39,17 +39,14 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     
     
     if (msg == ".ㅊㅊ") {
-      //replier.reply(file["today"][file["today"].length - 1]["time"].split("일")[0] != new Date().getDate())
-     // if (file["today"][file["today"].length - 1]["time"].split("일")[0] != new Date().getDate()) file["today"] = [];
-      
-      //if (file["today"][file["today"].length - 1].time.split("일")[0] != new Date().getDate()) file["today"] = [];
+
       if (file["todayDate"] != new Date().getDate()) {
         file["today"] = [];
         file["todayDate"] = new Date().getDate();
       }
       
       if (!file["today"].find(e => e.name == sender)) {
-        //replier.reply(1)
+        
         var score = Math.floor(Math.random()*10) + 1;
         
         file["today"].push(
@@ -70,13 +67,8 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
           );
           
         } else {
-          /*
-          var temp = file["total"][file["total"].find(e => e.name == sender)+1];
-          replier.reply(temp)
-          */
           
           file["total"].find(e => e.name == sender).score += score;
-          //file["total"][file["total"].find(e => e.name == sender)].score = temp + score;
         }
         
         
