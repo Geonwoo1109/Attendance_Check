@@ -8,9 +8,9 @@ var arr = [];
 
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   try {
-    if (room != "카톡봇 테스트방") return;
+   //if (room != "카톡봇 테스트방") return;
     
-    if (msg == ".ㄹ") Fs.write(Path + room, "{}")
+    if (msg == ".ㄹ") reset(room);
     if (msg == ".ㄹㅇ") {
       file = JSON.parse(Fs.read(Path + room));
       file["today"] = [];
@@ -18,15 +18,11 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     }
     
     
-    if (!Fs.read(Path + room)) Fs.write(Path + room, "{}");
+    if (!Fs.read(Path + room)) reset(room);
     
     file = JSON.parse(Fs.read(Path + room));
     
-    if (!JSON.parse(Fs.read(Path + room))) file = {};
-    if (!JSON.parse(Fs.read(Path + room))["today"]) file["today"] = [];
-    if (!JSON.parse(Fs.read(Path + room))["todayDate"])
-      file["todayDate"] = new Date().getDate();
-    if (!JSON.parse(Fs.read(Path + room))["total"]) file["total"] = [];
+    if (!JSON.parse(Fs.read(Path + room))) reset(room);
     
     Fs.write(Path + room, JSON.stringify(file));
     
@@ -118,7 +114,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       replier.reply(temp.join("\n\n"));
     }
     
-    if (msg == ".내순위") {
+    if (msg == ".내순위") { try{
       
       arr = file["total"].sort((a,b) => b.score-a.score).map((i) => i.name);
       replier.reply(
@@ -130,7 +126,9 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
           + (arr.indexOf(sender) +1) + "등 "
           +"(" + file["total"].find(e => e.name == sender).score + "점)"
       );
-    }
+    } catch(e) {
+      replier.reply(sender + "님, 오늘 출석을 해주세요!");
+    } }
     
   } catch(e) {
     replier.reply(e + e.lineNumber);
@@ -147,4 +145,14 @@ function time() {
     + day.getMinutes() + "분 "
     + day.getSeconds() + "초";
   
+}
+
+
+function reset(room) {
+      file = {};
+      file["today"] = [];
+      file["total"] = [];
+      file["todayDate"] = new Date().getDate();
+      Fs.write(Path + room, JSON.stringify(file));
+      return;
 }
