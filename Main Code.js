@@ -6,17 +6,20 @@ const Path = "/sdcard/Attendance2/";
 var file = {};
 var arr = [];
 
+var score;
+
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   try {
    //if (room != "카톡봇 테스트방") return;
     
+    /*
     if (msg == ".ㄹ") reset(room);
     if (msg == ".ㄹㅇ") {
       file = JSON.parse(Fs.read(Path + room));
       file["today"] = [];
           Fs.write(Path + room, JSON.stringify(file));
     }
-    
+    */
     
     if (!Fs.read(Path + room)) reset(room);
     
@@ -29,7 +32,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
     
     if (msg == ".ㅌ") {
       replier.reply(JSON.stringify(file, null, 4))
-      replier.reply(JSON.stringify(file["total"].find(e => e.name == sender).score))
+      //replier.reply(JSON.stringify(file["total"].find(e => e.name == sender).score))
     
     }
     
@@ -43,7 +46,10 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       
       if (!file["today"].find(e => e.name == sender)) {
         
-        var score = Math.floor(Math.random()*10) + 1;
+        if (file["today"].length == 0) score = 10;
+        else if (file["today"].length == 1) score = 9;
+        else if (file["today"].length == 2) score = 8;
+        else score = Math.floor(Math.random()*7) + 1;
         
         file["today"].push(
           {
