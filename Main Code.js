@@ -49,6 +49,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
         if (file["today"].length == 0) score = 10;
         else if (file["today"].length == 1) score = 9;
         else if (file["today"].length == 2) score = 8;
+        else if (file["today"].length == 9) score = 10;
         else score = Math.floor(Math.random()*7) + 1;
         
         file["today"].push(
