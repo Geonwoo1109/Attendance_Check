@@ -46,6 +46,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
       
       if (!file["today"].find(e => e.name == sender)) {
         
+        //저장된 배열의 길이 판단
         if (file["today"].length == 0) score = 10;
         else if (file["today"].length == 1) score = 9;
         else if (file["today"].length == 2) score = 8;
